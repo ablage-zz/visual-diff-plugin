@@ -1,0 +1,74 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+
+    <f:entry title="Screenshots Path" field="screensPath">
+        <f:textbox />
+    </f:entry>
+
+    <f:advanced>
+
+        <f:section title="Comparison Options">
+
+            <f:entry title="Verbose" field="verbose">
+                <f:checkbox />
+            </f:entry>
+
+            <f:entry title="Field of view" field="fov">
+                <f:textbox default="45.0" />
+            </f:entry>
+
+            <f:entry title="Threshold" field="threshold">
+                <f:textbox default="100" />
+            </f:entry>
+
+            <f:entry title="Gamma" field="gamma">
+                <f:textbox default="2.2" />
+            </f:entry>
+
+            <f:entry title="Luminance" field="luminance">
+                <f:textbox default="100.0" />
+            </f:entry>
+
+            <f:entry title="Only consider luminance" field="luminanceOnly">
+                <f:checkbox />
+            </f:entry>
+
+            <f:entry title="Color Factor" field="colorFactor">
+                <f:textbox default="1.0" />
+            </f:entry>
+
+            <f:entry title="Downsample" field="downSample">
+                <f:textbox default="0" />
+            </f:entry>
+
+        </f:section>
+
+        <f:section title="Build Options">
+
+            <f:entry title="Promote unknown screenshots as approved" field="autoApprove">
+                <f:checkbox />
+            </f:entry>
+
+            <f:entry title="When differences are found, mark build as">
+                <label>
+                    <f:radio name="markAs" value="failed" checked="${instance.markAs=='failed'}" />
+                    Failed
+                </label>
+                <label>
+                    <f:radio name="markAs" value="unstable" checked="${instance.markAs==null || instance.markAs=='unstable'}" />
+                    Unstable
+                </label>
+                <label>
+                    <f:radio name="markAs" value="nothing" checked="${instance.markAs=='nothing'}"  />
+                    Do Nothing
+                </label>
+            </f:entry>
+
+            <f:entry title="Number of differences" field="numberOfDifferences">
+                <f:textbox default="1" />
+            </f:entry>
+
+        </f:section>
+
+    </f:advanced>
+
+</j:jelly>

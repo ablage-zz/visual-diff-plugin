@@ -1,0 +1,120 @@
+.mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 10000;
+}
+.image-chart-box {
+    padding: 22px;
+}
+.image-title {
+    color: blue;
+    cursor: pointer;
+}
+.image-title:hover {
+    text-decoration: underline;
+}
+.slider-box {
+    position: fixed;
+    top: 0;
+    width: 500px;
+    height: 130px;
+    background-color: white;
+    border: 1px solid black;
+    z-index: 1000;
+    padding: 6px;
+    padding-top: 0px;
+}
+
+.state {
+    display: inline-block;
+    width: 65px;
+    text-align: right;
+    padding-right: 6px;
+}
+
+.state-diff {
+    color: red;
+}
+.state-diff-ok {
+    color: orange;
+}
+.state-ok {
+    color: green;
+}
+.state-unknown {
+    color: yellow;
+}
+.slider {
+    width: 500px;
+}
+
+.image-compare-box {
+    position: fixed;
+    z-index: 10001;
+    display: none;
+    background-color: white;
+    border: 1px solid black;
+    padding: 12px;
+    padding-top: 6px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.image-compare-box img {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+.image-compare-box img.screen {
+    opacity: 0.5;
+}
+.image-compare-box img.approved {
+    opacity: 0.5;
+}
+.image-compare-box img.diff {
+    opacity: 0;
+}
+
+.close-link {
+    color: blue;
+    cursor: pointer;
+    display: inline-block;
+    width: 95%;
+    text-align: center;
+    margin: 6px;
+    padding: 6px;
+    font-size: 14px;
+    padding-top: 6px;
+}
+.close-link:hover {
+    text-decoration: underline;
+    background-color: lightgray;
+}
+
+.compare-text {
+    text-align: center;
+}
+.compare-title-text {
+    text-align: center;
+}
+
+.action-link {
+    color: red;
+    cursor: pointer;
+}
+.action-link:hover {
+    text-decoration: underline;
+}
+.approve-link {
+    color: green;
+    font-weight: bold;
+}
+.type-not-build .image-title {
+    opacity: 0.5;
+}
+.control-box {
+    padding: 12px;
+}

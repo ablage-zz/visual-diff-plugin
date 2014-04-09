@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>1.532.2</version>
+    </parent>
+
+    <artifactId>visual-diff</artifactId>
+    <version>0.6.1</version>
+    <packaging>hpi</packaging>
+
+    <name>Visual-Diff Plugin</name>
+    <description>A plug-in to manage differences in screenshots.</description>
+
+    <developers>
+        <developer>
+            <email>marcel.erz@gmail.com</email>
+            <id>marcelerz</id>
+            <name>Marcel Erz</name>
+            <timezone>-8</timezone>
+            <url>http://www.apfelcode.de</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <organization>
+        <name>Shipwire Inc.</name>
+        <url>http://www.shipwire.com</url>
+    </organization>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <distributionManagement>
+        <repository>
+            <id>maven.jenkins-ci.org</id>
+            <url>http://maven.jenkins-ci.org:8081/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>repo.jenkins-ci.org</id>
+            <url>http://repo.jenkins-ci.org/public/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repo.jenkins-ci.org</id>
+            <url>http://repo.jenkins-ci.org/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <scm>
+        <url>http://github.com/jenkinsci/visual-diff-plugin</url>
+        <connection>scm:git:git://github.com/jenkinsci/visual-diff-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:jenkinsci/visual-diff-plugin.git</developerConnection>
+    </scm>
+
+</project>

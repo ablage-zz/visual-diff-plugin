@@ -1,0 +1,103 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+
+    <l:layout title="Visual Diff">
+
+        <div class="mask"></div>
+
+        <st:include page="sidepanel.jelly" />
+
+        <l:main-panel>
+
+            <link type="text/css" href="${rootURL}/plugin/visual-diff/css/jquery-ui.css" rel="stylesheet" />
+            <link type="text/css" href="${rootURL}/plugin/visual-diff/css/compare.css" rel="stylesheet" />
+
+            <script type="text/javascript" src="${rootURL}/plugin/visual-diff/js/jquery-1.11.0.js"></script>
+            <script type="text/javascript" src="${rootURL}/plugin/visual-diff/js/jquery-ui-1.10.4.js"></script>
+
+            <script type="text/javascript" src="${rootURL}/plugin/visual-diff/js/compare.js"></script>
+
+
+
+            <h1>Visual Difference Report</h1>
+
+            <div class="image-chart-box">
+                <img src="graph" />
+            </div>
+
+            <j:forEach items="${it.getArtifacts().getApprovedScreens()}" var="screenshot">
+
+                <div class="image-title-box ${it.getCssClass(screenshot)}" data-id="${screenshot.getName()}">
+
+                    <j:choose>
+                        <j:when test="${it.getArtifacts().hasThresholdDiff(screenshot)}">
+                            <div class="state state-diff">DIFF</div>
+                        </j:when>
+                        <j:when test="${it.getArtifacts().hasBuildDiff(screenshot)}">
+                            <div class="state state-diff-ok">OK</div>
+                        </j:when>
+                        <j:when test="${!it.getArtifacts().hasBuildScreen(screenshot)}">
+                            <div class="state state-unknown">UNKNOWN</div>
+                        </j:when>
+                        <j:otherwise>
+                            <div class="state state-ok">OK</div>
+                        </j:otherwise>
+                    </j:choose>
+
+                    <span class="image-title">${screenshot.getName()}</span>
+
+                    <div class="image-compare-box">
+
+                        <div class="slider-box">
+                            <div class="close-link">Close</div>
+                            <div class="compare-text">Compare Build Screen with Approved Screen</div>
+                            <div class="compare-title-text">${screenshot.getName()}</div>
+                            <table width="100%">
+                                <tr>
+                                    <td align="left">Build
+                                        <j:if test="${it.getArtifacts().hasBuildDiff(screenshot) || !it.getArtifacts().isApproved(screenshot)}">
+                                            (<span class="action-link approve-link">Approve</span>)
+                                        </j:if>
+                                    </td>
+                                    <td align="right">
+                                        <j:if test="${it.getArtifacts().isApproved(screenshot)}">
+                                            (<span class="action-link delete-link">Delete</span>)
+                                        </j:if>
+                                        <j:if test="${!it.getArtifacts().isApproved(screenshot)}">
+                                            (None)
+                                        </j:if>
+                                        Approved
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="slider"></div>
+                            <j:if test="${it.getArtifacts().hasBuildDiff(screenshot)}">
+                                <label><input type="checkbox" /> Show Mask</label>
+                            </j:if>
+                        </div>
+
+
+                        <div class="images-box">
+                            <j:if test="${it.getArtifacts().hasBuildScreen(screenshot)}">
+                                <img class="screen" alt="buildScreens/${screenshot.getName()}" />
+                            </j:if>
+                            <j:if test="${it.getArtifacts().isApproved(screenshot)}">
+                                <img class="approved" alt="approvedScreens/${screenshot.getName()}" />
+                            </j:if>
+                            <j:if test="${it.getArtifacts().hasBuildDiff(screenshot)}">
+                                <img class="diff" alt="buildDiffs/${screenshot.getName()}" />
+                            </j:if>
+                        </div>
+                    </div>
+                </div>
+
+            </j:forEach>
+
+            <div class="control-box">
+                <span class="action-link delete-all-link">Delete all approved!</span>
+            </div>
+
+        </l:main-panel>
+
+    </l:layout>
+
+</j:jelly>
