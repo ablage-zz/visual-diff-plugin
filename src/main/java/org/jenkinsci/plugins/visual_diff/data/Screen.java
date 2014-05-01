@@ -1,5 +1,7 @@
 package org.jenkinsci.plugins.visual_diff.data;
 
+import net.sf.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
@@ -245,5 +247,24 @@ public class Screen implements Serializable {
      */
     public void approve() {
         approved = true;
+    }
+
+
+    /**
+     * Gets a JSON object
+     *
+     * @return JSON
+     */
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+
+        obj.put("newScreen", newScreen);
+        obj.put("existing", existing);
+        obj.put("imageName", imageName);
+        obj.put("approvedImage", approvedImage);
+        obj.put("buildImage", buildImage);
+        obj.put("approved", approved);
+
+        return obj;
     }
 }

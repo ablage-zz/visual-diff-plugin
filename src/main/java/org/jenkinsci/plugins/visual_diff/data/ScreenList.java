@@ -1,5 +1,8 @@
 package org.jenkinsci.plugins.visual_diff.data;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -218,5 +221,19 @@ public class ScreenList extends ArrayList<Screen> {
      */
     public boolean hasScreenName(String name) {
         return (getScreenByName(name) != null);
+    }
+
+
+    /**
+     * Gets a JSON object
+     *
+     * @return JSON
+     */
+    public JSONArray toJSON() {
+        JSONArray list = new JSONArray();
+        for(Screen screen : this) {
+            list.add(screen.toJSON());
+        }
+        return list;
     }
 }
