@@ -32,5 +32,14 @@ public class DataAction extends InvisibleAction implements Serializable {
     public ScreenList getScreenList() {
         return screenList;
     }
+
+    /**
+     * Gets the JSON data
+     *
+     * @return JSON
+     */
+    public String getJSONData() {
+        return screenList.toJSON().toString();
+    }
 }
 
