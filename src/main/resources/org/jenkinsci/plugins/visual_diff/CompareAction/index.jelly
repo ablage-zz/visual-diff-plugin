@@ -10,15 +10,88 @@
             <link type="text/css" href="${rootURL}/plugin/visual-diff/css/compare.css" rel="stylesheet" />
             <link type="text/css" href="${rootURL}/plugin/visual-diff/css/bootstrap.min.css" rel="stylesheet" />
 
-
             <script type="text/javascript" src="${rootURL}/plugin/visual-diff/js/jquery-1.11.0.js"></script>
             <script type="text/javascript" src="${rootURL}/plugin/visual-diff/js/jquery-ui-1.10.4.js"></script>
             <script type="text/javascript" src="${rootURL}/plugin/visual-diff/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="${rootURL}/plugin/visual-diff/js/handlebars-v1.3.0.js"></script>
+            <script type="text/javascript" src="${rootURL}/plugin/visual-diff/js/underscore.js"></script>
 
+             <script type="text/template" id="compare_view">
+                 <div class="overlay-view" data-index="{{index}}">
+                    <div class="close-box">X</div>
 
-            <script type="text/javascript" src="${rootURL}/plugin/visual-diff/js/compare.js"></script>
+                    <div class="image-frame">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="zoom-slider"></div>
+                                </td>
+                                <td class="image-column">
+                                    <div class="image-container">
+                                        <img class="image-approved" src="{{approvedUrl}}" width="{{initialWidth}}" height="{{initialHeight}}" />
+                                        <img class="image-build" src="{{buildUrl}}" width="{{initialWidth}}" height="{{initialHeight}}" />
+                                        <img class="image-highlight" src="{{maskUrl}}" width="{{initialWidth}}" height="{{initialHeight}}" />
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
 
+                    <div class="control-container">
+                        <table>
+                            <tr>
+                                <td>{{#unless first}}<a href="#" class="link-prev">PREV</a>{{/unless}}</td>
+                                <td></td>
+                                <td>{{#unless last}}<a href="#" class="link-next">NEXT</a>{{/unless}}</td>
+                            </tr>
+                            <tr colspan="3">
+                                <td>{{imageName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Approved</td>
+                                <td></td>
+                                <td>Build</td>
+                            </tr>
+                            <tr colspan="3">
+                                <td><div class="compare-slider"></div></td>
+                            </tr>
+                            <tr colspan="3">
+                                <td><label><input type="checkbox" class="difference-check"></input> Difference highlighting</label></td>
+                            </tr>
+                        </table>
+                    </div>
+                 </div>
+             </script>
 
+             <script type="text/template" id="row_view">
+                 <table>
+                     {{#each screenData}}
+                         <tr data-index="{{index}}">
+                            <td>
+                                <span>{{#compare newScreen "==" "autoApproved"}}AA{{else}}{{#compare newScreen "==" "unApproved"}}UA{{else}}--{{/compare}}{{/compare}}</span>
+                            </td>
+                            <td>
+                                <span>{{#compare existing "==" "equal"}}=={{else}}{{#compare existing "==" "aboveThreshold"}}A{{else}}{{#compare existing "==" "belowThreshold"}}B{{else}}--{{/compare}}{{/compare}}{{/compare}}</span>
+                            </td>
+                            <td>
+                                <span class="{{#if approved}}approved{{else}}unapproved{{/if}}">X</span>
+                            </td>
+                            <td>
+                                <span class="{{#if approvedImage}}approved-screen{{else}}unapproved-screen{{/if}}">A</span>
+                            </td>
+                            <td>
+                                <span class="{{#if buildImage}}build-screen{{else}}no-build-screen{{/if}}">B</span>
+                            </td>
+                            <td>
+                                <span>{{#if pending}}P{{else}}-{{/if}}</span>
+                            </td>
+                             <td class="name">
+                                 <a href="#">{{imageName}}</a>
+                             </td>
+                         </tr>
+                     {{/each}}
+                 </table>
+             </script>
 
             <h1>Visual Difference Report</h1>
 
@@ -26,95 +99,15 @@
                 <img src="graph" />
             </div>
 
-            <ul class="status nav nav-tabs">
-                <li><a href="#ALL" data-toggle="tab">ALL</a></li>
-                <li><a href="#OKs" data-toggle="tab">OKs</a></li>
-                <li><a href="#TODOs" data-toggle="tab">TODOs</a></li>
-            </ul>
+            <div id="compare_overlay"></div>
+            <div id="compare_loading">Loading...</div>
+            <div id="compare_table"></div>
 
-            <j:forEach items="${it.getArtifacts().getApprovedScreens()}" var="screenshot">
+            <script type="text/javascript">
+                var screenData = ${it.getData().getJSONData()};
+            </script>
 
-                <div class="image-title-box ${it.getCssClass(screenshot)}" data-id="${screenshot.getName()}">
-
-                    <j:choose>
-                        <j:when test="${it.getArtifacts().hasThresholdDiff(screenshot)}">
-                            <div class="state state-diff label label-important">DIFF</div>
-                        </j:when>
-                        <j:when test="${it.getArtifacts().hasBuildDiff(screenshot)}">
-                            <div class="state state-diff-ok label label-warning">OK</div>
-                        </j:when>
-                        <j:when test="${!it.getArtifacts().hasBuildScreen(screenshot)}">
-                            <div class="state state-unknown label label-info">UNKNOWN</div>
-                        </j:when>
-                        <j:otherwise>
-                            <div class="state state-ok label label-success">OK</div>
-                        </j:otherwise>
-                    </j:choose>
-
-                    <span class="image-title"><i class="icon-picture"></i> ${screenshot.getName()}</span>
-
-
-                    <div class="image-compare-box hide modal">
-
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                            <h3>Compare ${screenshot.getName()}</h3>
-                        </div>
-
-
-                        <div class="modal-body">
-
-                            <div class="slider-box">
-
-                                <div class="slider"></div>
-
-                                <table width="100%">
-                                    <tr>
-                                        <td align="left">
-                                            <span class="label">Previously Approved</span>
-                                        </td>
-                                        <td align="right">
-                                            <span class="label">Build</span>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <j:if test="${it.getArtifacts().hasBuildDiff(screenshot)}">
-                                    <label><input type="checkbox" /> Highlight differences</label>
-                                </j:if>
-                            </div>
-
-                            <div class="images-box">
-                                <j:if test="${it.getArtifacts().hasBuildScreen(screenshot)}">
-                                    <img class="screen" alt="buildScreens/${screenshot.getName()}" />
-                                </j:if>
-                                <j:if test="${it.getArtifacts().isApproved(screenshot)}">
-                                    <img class="approved" alt="approvedScreens/${screenshot.getName()}" />
-                                </j:if>
-                                <j:if test="${it.getArtifacts().hasBuildDiff(screenshot)}">
-                                    <img class="diff" alt="buildDiffs/${screenshot.getName()}" />
-                                </j:if>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-
-                            <j:if test="${it.getArtifacts().isApproved(screenshot)}">
-                                <span class="action-link delete-link btn btn-mini btn-danger">Delete Approved Screen</span>
-                            </j:if>
-                            <j:if test="${it.getArtifacts().hasBuildDiff(screenshot) || !it.getArtifacts().isApproved(screenshot)}">
-                                <span class="action-link approve-link btn btn-mini btn-warning">Approve Build Screen</span>
-                            </j:if>
-
-                        </div>
-                    </div>
-                </div>
-
-            </j:forEach>
-
-            <div class="control-box">
-                <span class="action-link delete-all-link btn btn-danger">Delete all approved</span>
-            </div>
+            <script type="text/javascript" src="${rootURL}/plugin/visual-diff/js/new.js"></script>
 
         </l:main-panel>
 
